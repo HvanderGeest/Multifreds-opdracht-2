@@ -14,33 +14,34 @@ public class ProductOwner extends Person {
 				project.doWork.drainPermits(); //changes where made, product owner checks if there needs to be a meeting
 					project.mutexEndUserWaitingForInvite.acquire();
 					project.mutexDevsWatingForMeeting.acquire();
-					if(project.endUserWithAproblem > 0){
-						if(project.devsWaitingForMeeting > 0){
+					if(project.getEndUserWithAproblem() > 0){
+						if(project.getDevsWaitingForMeeting() > 0){
+							System.out.println("endUser meeting is happening");
 							project.meetingHappening =true;
-							project.invitation.release(project.endUserWithAproblem);
+							project.invitation.release(project.getEndUserWithAproblem());
 							
-							project.endUserWaitingForMeeting.acquire(project.endUserWithAproblem);
+							project.endUserWaitingForMeeting.acquire(project.getEndUserWithAproblem());
 							//all endusers have arived
-							project.invationForMeetingRoom.release(project.endUserWithAproblem);
+							System.out.println("all end users have arrived");
+							project.invationForMeetingRoom.release(project.getEndUserWithAproblem());
 							//one dev requested
 							project.softwareDeveloperRequestedForMeetingRoom.release(1);
-							project.devReadyForMeeting.release(project.devsWaitingForMeeting);
+							project.devReadyForMeeting.release(project.getDevsWaitingForMeeting());
 					
 				
 							//wait for when everybody is in the meeting room.
-							project.endUserInMeetingRoom.acquire(project.endUserWithAproblem);
-							project.softwareDeveloperInMeetingRoom.acquire();
-						
+							project.inMeetingRoom.acquire(project.getEndUserWithAproblem() + 1);
+							System.out.println("All participants are in the meeting room");
 							//start the meeting
-							System.out.println("starting enduser meeting");
+							System.out.println("enduser meeting started");
 							meeting();
-							System.out.println("ending enduser meeting");
+							System.out.println("enduser meeting ended");
 							//the plus one is for the software developer attending the meeting
-							project.backToLiving.release((project.endUserWithAproblem+1));
-							project.leftMeetingRoom.acquire((project.endUserWithAproblem+1));
+							project.backToLiving.release((project.getEndUserWithAproblem()+1));
 							
-							project.devsWaitingForMeeting = 0;
-							project.endUserWithAproblem = 0;
+							project.leftMeetingRoom.acquire((project.getEndUserWithAproblem()+1));
+							project.setDevsWaitingForMeeting(0);
+							project.setEndUserWithAproblem(0);
 							project.meetingHappening = false;
 							System.out.println("enduser meeting over and everybody left the room");
 							project.mutexEndUserWaitingForInvite.release();
@@ -52,13 +53,15 @@ public class ProductOwner extends Person {
 							project.mutexDevsWatingForMeeting.release();
 						}
 						
-					} else if(project.devsWaitingForMeeting > 3) {
+					} else if(project.getDevsWaitingForMeeting() > 3) {
 						//dev meeting
+						System.out.println("dev meeting is happening");
 						project.meetingHappening = true;
 						project.mutexEndUserWaitingForInvite.release();
 						project.softwareDeveloperRequestedForMeetingRoom.release(3);
-						project.devReadyForMeeting.release(project.devsWaitingForMeeting);
-						project.softwareDeveloperInMeetingRoom.acquire(3);
+						project.devReadyForMeeting.release(project.getDevsWaitingForMeeting());
+						project.inMeetingRoom.acquire(3);
+						System.out.println("All devs are in the meeting room");
 						//start meeting
 						System.out.println("dev meeting started");
 						meeting();
@@ -67,7 +70,7 @@ public class ProductOwner extends Person {
 						project.backToLiving.release(3);
 						project.leftMeetingRoom.acquire(3);
 						//everybody left the meeting
-						project.devsWaitingForMeeting = 0;
+						project.setDevsWaitingForMeeting(0);
 						project.meetingHappening = false;
 						System.out.println("dev meeting over and everybody left the room");
 						project.mutexDevsWatingForMeeting.release();

@@ -23,15 +23,6 @@ public class Person extends Thread {
 		return "Person " + number;
 	}
 	
-	public void inMeeting(Person p) {
-		try {
-			System.out.println(p+"In Meeting");
-			Thread.sleep(10000);
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 
 }

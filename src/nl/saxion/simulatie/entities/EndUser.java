@@ -19,16 +19,18 @@ public class EndUser extends Person {
 				
 				//send notice
 				project.addUserWithProblem();
-				System.out.println(this+ " has found a bugg");
 				project.invitation.acquire();
 				System.out.println(this + "is invited for a meeting");
 				
 				
 				travel();
 				project.endUserWaitingForMeeting.release();
+				System.out.println(this+"has arrived and is waiting for invitation for the start of the meeting");
 				project.invationForMeetingRoom.acquire();
-				project.endUserInMeetingRoom.release();
+				System.out.println(this + "Going to te meeting room");
+				project.inMeetingRoom.release();
 				project.backToLiving.acquire();
+				System.out.println(this+ "about to leave the room and go back to just living");
 				project.leftMeetingRoom.release();
 			
 				

@@ -18,10 +18,11 @@ public class SoftwareDeveloper extends Person {
 					project.devReadyForMeeting.acquire();
 					
 					if(project.softwareDeveloperRequestedForMeetingRoom.tryAcquire()){
-						project.softwareDeveloperInMeetingRoom.release();
+						System.out.println(this+"going to the meeting room for the meeting");
+						project.inMeetingRoom.release();
 						project.backToLiving.acquire();
+						System.out.println(this+"about to leave the room and go back to just living");
 						project.leftMeetingRoom.release();
-						System.out.println(number+" backToLiving");
 					}	
 				}
 			} catch (InterruptedException e) {
