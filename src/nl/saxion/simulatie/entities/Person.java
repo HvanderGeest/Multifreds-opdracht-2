@@ -9,7 +9,9 @@ public class Person extends Thread {
 	public Person(int number) {
 		this.number = number;
 	}
-	
+	/**
+	 * simulates the time a person needs to live without a meeting
+	 */
 	public void justLive(){
 		try {
 			Thread.sleep((int)(Math.random()*750));

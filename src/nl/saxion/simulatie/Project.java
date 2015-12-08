@@ -17,10 +17,8 @@ public class Project {
 	private ProductOwner po;
 
 	public Semaphore invitation = new Semaphore(0, true);
-	public Semaphore enduserInMeeting = new Semaphore(0, true);
 	public Semaphore devReadyForMeeting = new Semaphore(0, true);
 	public Semaphore doWork = new Semaphore(0);
-	
 	public Semaphore endUserWaitingForMeeting = new Semaphore(0, true);
 	public Semaphore invationForMeetingRoom = new Semaphore(0, true);
 	public Semaphore inMeetingRoom = new Semaphore(0, true);
@@ -31,9 +29,13 @@ public class Project {
 	public boolean meetingHappening = false;
 	private int devsWaitingForMeeting = 0;
 	private int endUserWithAproblem = 0;
+	
 	public Semaphore mutexDevsWatingForMeeting = new Semaphore(1, true);
 	public Semaphore mutexEndUserWaitingForInvite = new Semaphore(1, true);
-
+	
+	/**
+	 *initializes the person threads in the system and starts them 
+	 */
 	public Project() {
 		p = this;
 		System.out.println("=== Starting Simulation ===");
@@ -60,30 +62,37 @@ public class Project {
 		new Project();
 
 	}
-
+	/**
+	 * get the singleton project
+	 * @return this project
+	 */
 	public static Project getInstance() {
 		return p;
 	}
-
+	/**
+	 * add one to the number of developers waiting for a meeting.
+	 */
 	public void addWaitingDeveloper() {
 		try {
 			mutexDevsWatingForMeeting.acquire();
 			devsWaitingForMeeting++;
 			mutexDevsWatingForMeeting.release();
-			doWork.release();
+			doWork.release(); //so the product owner knows he needs to check something
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-
+	/**
+	 * add one to the number of endusers waiting for a meeting.
+	 */
 	public void addUserWithProblem() {
 		try {
 			mutexEndUserWaitingForInvite.acquire();
 			endUserWithAproblem++;
 			mutexEndUserWaitingForInvite.release();
-			doWork.release();
+			doWork.release(); //so the product owner knows he needs to check something
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

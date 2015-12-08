@@ -14,10 +14,12 @@ public class SoftwareDeveloper extends Person {
 			justLive();
 			try {
 				if(!project.meetingHappening){
+					//meeting is not going on at the moment
 					project.addWaitingDeveloper();
 					project.devReadyForMeeting.acquire();
 					
 					if(project.softwareDeveloperRequestedForMeetingRoom.tryAcquire()){
+						//this dev is chosen for the meeting
 						System.out.println(this+"going to the meeting room for the meeting");
 						project.inMeetingRoom.release();
 						project.backToLiving.acquire();

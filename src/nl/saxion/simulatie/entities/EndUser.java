@@ -21,17 +21,15 @@ public class EndUser extends Person {
 				project.addUserWithProblem();
 				project.invitation.acquire();
 				System.out.println(this + "is invited for a meeting");
-				
-				
 				travel();
-				project.endUserWaitingForMeeting.release();
 				System.out.println(this+"has arrived and is waiting for invitation for the start of the meeting");
+				project.endUserWaitingForMeeting.release(); //so that the product owner knows when everybody arrived
 				project.invationForMeetingRoom.acquire();
 				System.out.println(this + "Going to te meeting room");
-				project.inMeetingRoom.release();
+				project.inMeetingRoom.release(); 
 				project.backToLiving.acquire();
 				System.out.println(this+ "about to leave the room and go back to just living");
-				project.leftMeetingRoom.release();
+				project.leftMeetingRoom.release(); //left the meeting room
 			
 				
 			} catch (InterruptedException e) {
@@ -41,7 +39,9 @@ public class EndUser extends Person {
 		}
 	}
 	
-	
+	/**
+	 * simulates the travel time it takes for a user to travel to the  company.
+	 */
 	public void travel(){
 		try {
 			System.out.println(this + "On the road again.. ");
@@ -56,7 +56,9 @@ public class EndUser extends Person {
 	public String toString() {
 		return "Enduser #" + number+ ": ";
 	}
-	
+	/**
+	 * simulates the time that the user lives without the need of a meeting
+	 */
 	@Override
 	public void justLive(){
 		try {

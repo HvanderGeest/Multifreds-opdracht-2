@@ -19,16 +19,15 @@ public class ProductOwner extends Person {
 							System.out.println("endUser meeting is happening");
 							project.meetingHappening =true;
 							project.invitation.release(project.getEndUserWithAproblem());
-							
+							//invitations send
 							project.endUserWaitingForMeeting.acquire(project.getEndUserWithAproblem());
 							//all endusers have arived
 							System.out.println("all end users have arrived");
 							project.invationForMeetingRoom.release(project.getEndUserWithAproblem());
-							//one dev requested
-							project.softwareDeveloperRequestedForMeetingRoom.release(1);
+							project.softwareDeveloperRequestedForMeetingRoom.release(1); //one dev requested
 							project.devReadyForMeeting.release(project.getDevsWaitingForMeeting());
-					
-				
+							//on dev joined the meeting room, the rest went back to work.
+							
 							//wait for when everybody is in the meeting room.
 							project.inMeetingRoom.acquire(project.getEndUserWithAproblem() + 1);
 							System.out.println("All participants are in the meeting room");
@@ -38,8 +37,8 @@ public class ProductOwner extends Person {
 							System.out.println("enduser meeting ended");
 							//the plus one is for the software developer attending the meeting
 							project.backToLiving.release((project.getEndUserWithAproblem()+1));
-							
 							project.leftMeetingRoom.acquire((project.getEndUserWithAproblem()+1));
+							//all people left the meeting room
 							project.setDevsWaitingForMeeting(0);
 							project.setEndUserWithAproblem(0);
 							project.meetingHappening = false;
@@ -58,7 +57,7 @@ public class ProductOwner extends Person {
 						System.out.println("dev meeting is happening");
 						project.meetingHappening = true;
 						project.mutexEndUserWaitingForInvite.release();
-						project.softwareDeveloperRequestedForMeetingRoom.release(3);
+						project.softwareDeveloperRequestedForMeetingRoom.release(3); //3 software developers requested
 						project.devReadyForMeeting.release(project.getDevsWaitingForMeeting());
 						project.inMeetingRoom.acquire(3);
 						System.out.println("All devs are in the meeting room");
@@ -95,18 +94,14 @@ public class ProductOwner extends Person {
 	public String toString() {
 		return "The Product Owner : ";
 	}
-	
+	/**
+	 * simulates the time it takes to hold a meeting.
+	 */
 	public void meeting(){
 		try {
 			Thread.sleep((int)(Math.random() * 2000));
 		} catch (InterruptedException e) {}			
 	}
 	
-	@Override
-	public void justLive(){
-		try {
-			Thread.sleep((int)(Math.random() * 100));
-		} catch (InterruptedException e) {}			
-	}
 	
 }
