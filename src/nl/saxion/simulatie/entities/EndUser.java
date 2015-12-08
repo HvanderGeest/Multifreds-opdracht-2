@@ -4,7 +4,7 @@ import nl.saxion.simulatie.Project;
 
 public class EndUser extends Person {
 	
-	private static final int MAX_TRAVEL_TIME =5000;
+	private static final int MAX_TRAVEL_TIME =750;
 	
 	public EndUser(int number) {
 		super(number);
@@ -16,12 +16,21 @@ public class EndUser extends Person {
 		while(true) {
 			justLive();
 			try {
-				System.out.println(this + "has found a BUG! PANIC!");
-				project.endUserProblemNotice.acquire();
+				
+				//send notice
+				project.addUserWithProblem();
+				System.out.println(this+ " has found a bugg");
 				project.invitation.acquire();
+				System.out.println(this + "is invited for a meeting");
+				
+				
 				travel();
-				project.enduserReadyForMeeting.acquire();
-				inMeeting(this);
+				project.endUserWaitingForMeeting.release();
+				project.invationForMeetingRoom.acquire();
+				project.endUserInMeetingRoom.release();
+				project.backToLiving.acquire();
+				project.leftMeetingRoom.release();
+			
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -49,7 +58,7 @@ public class EndUser extends Person {
 	@Override
 	public void justLive(){
 		try {
-			Thread.sleep((int)(Math.random() * 400000));
+			Thread.sleep((int)(Math.random() * 6000));
 		} catch (InterruptedException e) {}			
 	}
 

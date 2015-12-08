@@ -13,8 +13,17 @@ public class SoftwareDeveloper extends Person {
 		while(true) {
 			justLive();
 			try {
-				project.devReadyForMeeting.acquire();
-				inMeeting(this);
+				if(!project.meetingHappening){
+					project.addWaitingDeveloper();
+					project.devReadyForMeeting.acquire();
+					
+					if(project.softwareDeveloperRequestedForMeetingRoom.tryAcquire()){
+						project.softwareDeveloperInMeetingRoom.release();
+						project.backToLiving.acquire();
+						project.leftMeetingRoom.release();
+						System.out.println(number+" backToLiving");
+					}	
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

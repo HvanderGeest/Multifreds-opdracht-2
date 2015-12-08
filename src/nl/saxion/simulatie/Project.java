@@ -16,11 +16,33 @@ public class Project {
 	private EndUser[] endusers;
 	private SoftwareDeveloper[] devs;
 	private ProductOwner po;
-	
-	public Semaphore endUserProblemNotice = new Semaphore(0, true);
-	public Semaphore invitation = new Semaphore(1, true);
-	public Semaphore enduserReadyForMeeting = new Semaphore(0, true);
+
+	public Semaphore invitation = new Semaphore(0, true);
+	public Semaphore enduserInMeeting = new Semaphore(0, true);
 	public Semaphore devReadyForMeeting = new Semaphore(0, true);
+	
+	public Semaphore doWork = new Semaphore(0);
+	
+	public Semaphore mutexDevsWatingForMeeting = new Semaphore(1, true);
+	public Semaphore mutexEndUserWaitingForInvite = new Semaphore(1 , true);
+	
+	public Semaphore endUserWaitingForMeeting = new Semaphore(0, true); 
+	
+	public Semaphore invationForMeetingRoom = new Semaphore(0, true); 
+	
+	//the two semaphores below can be one semaphore; in meeting room.
+	public Semaphore endUserInMeetingRoom = new Semaphore(0, true);
+	public Semaphore softwareDeveloperInMeetingRoom = new Semaphore(0, true);
+	
+	public Semaphore backToLiving = new Semaphore(0, true);
+	
+	public Semaphore softwareDeveloperRequestedForMeetingRoom = new Semaphore(0, true);
+	public Semaphore leftMeetingRoom = new Semaphore(0, true);
+	public boolean meetingHappening = false;
+	
+	
+	public int devsWaitingForMeeting = 0;
+	public int endUserWithAproblem = 0;
 	
 	
 	public Project() {
@@ -56,6 +78,32 @@ public class Project {
 	
 	public static Project getInstance() {
 		return p;
+	}
+	
+	public void addWaitingDeveloper(){
+		try {
+			mutexDevsWatingForMeeting.acquire();
+			devsWaitingForMeeting++;
+			mutexDevsWatingForMeeting.release();
+			doWork.release();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void addUserWithProblem(){
+		try {
+			mutexEndUserWaitingForInvite.acquire();
+			endUserWithAproblem++;
+			mutexEndUserWaitingForInvite.release();
+			doWork.release();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 }
