@@ -23,7 +23,7 @@ public class ProductOwner extends Person {
 							project.endUserWaitingForMeeting.acquire(project.getEndUserWithAproblem());
 							//all endusers have arived
 							System.out.println("all end users have arrived");
-							project.invationForMeetingRoom.release(project.getEndUserWithAproblem());
+							project.invitationForMeetingRoom.release(project.getEndUserWithAproblem());
 							project.softwareDeveloperRequestedForMeetingRoom.release(1); //one dev requested
 							project.devReadyForMeeting.release(project.getDevsWaitingForMeeting());
 							//on dev joined the meeting room, the rest went back to work.

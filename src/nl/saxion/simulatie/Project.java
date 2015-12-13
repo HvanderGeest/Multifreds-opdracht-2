@@ -20,7 +20,7 @@ public class Project {
 	public Semaphore devReadyForMeeting = new Semaphore(0, true);
 	public Semaphore doWork = new Semaphore(0);
 	public Semaphore endUserWaitingForMeeting = new Semaphore(0, true);
-	public Semaphore invationForMeetingRoom = new Semaphore(0, true);
+	public Semaphore invitationForMeetingRoom = new Semaphore(0, true);
 	public Semaphore inMeetingRoom = new Semaphore(0, true);
 	public Semaphore backToLiving = new Semaphore(0, true);
 	public Semaphore softwareDeveloperRequestedForMeetingRoom = new Semaphore(0, true);

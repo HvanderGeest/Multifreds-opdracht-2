@@ -24,7 +24,7 @@ public class EndUser extends Person {
 				travel();
 				System.out.println(this+"has arrived and is waiting for invitation for the start of the meeting");
 				project.endUserWaitingForMeeting.release(); //so that the product owner knows when everybody arrived
-				project.invationForMeetingRoom.acquire();
+				project.invitationForMeetingRoom.acquire();
 				System.out.println(this + "Going to te meeting room");
 				project.inMeetingRoom.release(); 
 				project.backToLiving.acquire();

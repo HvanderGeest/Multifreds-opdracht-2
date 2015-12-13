@@ -2,7 +2,7 @@ package nl.saxion.simulatie.entities;
 
 import nl.saxion.simulatie.Project;
 
-public class Person extends Thread {
+public abstract class Person extends Thread {
 	protected Project project = Project.getInstance();
 	protected int number;
 	
